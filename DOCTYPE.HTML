@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVELOR - Brand Watch & Accessories</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome İkonlar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display (Luxury Serif) & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        woodDark: '#1a0d07',
+                        woodDeep: '#2b1810',
+                        woodMedium: '#3d2317',
+                        woodAccent: '#8b5a2b',
+                        goldAccent: '#d4af37',
+                        goldHover: '#b89628',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Tünd Qəhvəyi Taxta Teksturası (Rich Deep Mahogany Timber Pattern) */
+        .wood-header {
+            background-color: #2b1810;
+            background-image: 
+                radial-gradient(ellipse at 50% -20%, rgba(139, 90, 43, 0.3), transparent 70%),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(0, 0, 0, 0.2) 0px,
+                    rgba(0, 0, 0, 0.2) 2px,
+                    transparent 2px,
+                    transparent 12px
+                ),
+                linear-gradient(
+                    180deg,
+                    rgba(43, 24, 16, 0.95) 0%,
+                    rgba(26, 13, 7, 0.98) 100%
+                );
+            border-bottom: 2px solid #8b5a2b;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 1:1 Kvadrat Nisbət */
+        .aspect-square-custom {
+            aspect-ratio: 1 / 1;
+        }
+
+        /* Tap.az Stili Lüks Card Kölgəsi və Animasiyası */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 28px -10px rgba(43, 24, 16, 0.25);
+        }
+
+        /* İncə Scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8b5a2b;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 font-sans text-stone-800 min-h-screen flex flex-col pt-20">
+
+    <!-- SABİT YUXARI PANEL (Fixed Wood Header) -->
+    <header class="fixed top-0 left-0 w-full wood-header text-white z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- AVELOR Logo (White Luxury Serif Typography) -->
+            <div class="flex items-center space-x-3">
+                <a href="#" class="font-serif text-2xl sm:text-3xl font-extrabold tracking-widest text-white hover:text-amber-200 transition drop-shadow-md">
+                    AVELOR
+                </a>
+                <span class="hidden md:inline-block text-[10px] uppercase tracking-widest bg-amber-950/80 text-amber-300 border border-amber-800/60 px-2.5 py-1 rounded">
+                    Watch & Accessories
+                </span>
+            </div>
+
+            <!-- Search Bar (Axtarış) -->
+            <div class="hidden sm:flex flex-1 max-w-xs md:max-w-md mx-4 lg:mx-8">
+                <div class="relative w-full">
+                    <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Saat və ya bijuteriya axtarın..." 
+                           class="w-full pl-4 pr-10 py-2 rounded-lg bg-black/40 border border-amber-900/50 text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs sm:text-sm">
+                    <button class="absolute right-3 top-2.5 text-amber-400 hover:text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions (Yeni Elan) -->
+            <div class="flex items-center space-x-3">
+                <button onclick="openAddModal()" class="bg-gradient-to-r from-amber-700 to-amber-900 hover:from-amber-600 hover:to-amber-800 text-white font-medium px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex items-center space-x-2 shadow-lg border border-amber-600/50 transition">
+                    <i class="fas fa-plus-circle text-amber-300"></i>
+                    <span>Yeni Elan</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow mt-6 mb-12">
+        
+        <!-- Səhifə Başlığı və Kateqoriya Filtrləri -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-b border-stone-200 pb-4">
+            <div>
+                <h1 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Məhsul Kataloqu</h1>
+                <p class="text-xs sm:text-sm text-stone-500 mt-0.5">AVELOR brendinin özəl saat və bijuteriya kolleksiyası</p>
+            </div>
+
+            <!-- Kateqoriya Filtrləri (Klassik və İnteraktiv) -->
+            <div class="flex items-center space-x-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+                <button onclick="setCategoryFilter('all')" id="btnFilterAll" 
+                        class="filter-btn active-filter px-4 py-2 rounded-full text-xs font-semibold bg-stone-900 text-white shadow transition">
+                    Bütün Məhsullar
+                </button>
+                <button onclick="setCategoryFilter('Saat')" id="btnFilterSaat" 
+                        class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-white border border-stone-300 text-stone-700 hover:bg-stone-100 transition">
+                    <i class="far fa-clock mr-1 text-amber-800"></i> Saatlar
+                </button>
+                <button onclick="setCategoryFilter('Bijuteriya')" id="btnFilterBijuteriya" 
+                        class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-white border border-stone-300 text-stone-700 hover:bg-stone-100 transition">
+                    <i class="fas fa-gem mr-1 text-amber-800"></i> Bijuteriya & Aksessuar
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobil Axtarış Input -->
+        <div class="w-full sm:hidden mb-6">
+            <input type="text" onkeyup="filterProducts()" id="mobileSearchInput" placeholder="Axtarış..." 
+                   class="w-full px-4 py-2.5 rounded-lg border border-stone-300 text-sm focus:ring-2 focus:ring-amber-800 bg-white">
+        </div>
+
+        <!-- KVADRAT ŞƏKİLLİ MƏHSUL KARTLARI QRİDİ (Tap.az Stili) -->
+        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
+            <!-- JS vasitəsilə doldurulacaq -->
+        </div>
+
+        <!-- Məhsul Tapılmadı Bildirişi -->
+        <div id="noProducts" class="hidden text-center py-20 bg-white rounded-xl border border-dashed border-stone-300 my-6">
+            <i class="fas fa-gem text-5xl text-stone-300 mb-3"></i>
+            <p class="text-stone-600 text-base font-medium">Axtarışınıza uyğun məhsul tapılmadı.</p>
+            <button onclick="resetFilters()" class="mt-3 text-xs text-amber-800 font-semibold underline">Bütün məhsulları göstər</button>
+        </div>
+    </main>
+
+    <!-- YENİ MƏHSUL ƏLAVƏ ETMƏ MODALI -->
+    <div id="addModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative border border-stone-200">
+            <button onclick="closeAddModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+            
+            <h2 class="font-serif text-xl font-bold text-stone-900 mb-4 border-b pb-2">Yeni Məhsul Əlavə Et</h2>
+
+            <form id="addProductForm" onsubmit="handleAddProduct(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 uppercase mb-1">Məhsul Adı</label>
+                    <input type="text" id="pTitle" required placeholder="məs: AVELOR Gold Chronograph Saat" 
+                           class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 uppercase mb-1">Qiymət (AZN)</label>
+                        <input type="number" id="pPrice" required placeholder="250" 
+                               class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 uppercase mb-1">Kateqoriya</label>
+                        <select id="pCategory" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-700 focus:outline-none bg-white">
+                            <option value="Saat">Saat</option>
+                            <option value="Bijuteriya">Bijuteriya</option>
+                            <option value="Aksessuar">Aksessuar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 uppercase mb-1">Şəhər / Ünvan</label>
+                    <input type="text" id="pLocation" required placeholder="Bakı, Şəhər mərkəzi" 
+                           class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 uppercase mb-1">Şəkil URL</label>
+                    <input type="url" id="pImageUrl" placeholder="https://images.unsplash.com/..." 
+                           class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                    <span class="text-[10px] text-stone-400">Boş buraxıldıqda avtomatik şəkil seçiləcək.</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 uppercase mb-1">Məhsul Haqqında</label>
+                    <textarea id="pDesc" rows="3" placeholder="Qızıl örtük, paslanmaz polad, zəmanətli..." 
+                              class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-700 focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 border border-stone-300 rounded-lg text-sm font-medium text-stone-600 hover:bg-stone-100">Ləğv Et</button>
+                    <button type="submit" class="px-5 py-2 bg-stone-900 hover:bg-black text-white rounded-lg text-sm font-medium shadow">Əlavə Et</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MƏHSUL DETALLARI MODALI -->
+    <div id="detailModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden relative border border-stone-200">
+            <button onclick="closeDetailModal()" class="absolute top-3 right-3 z-10 bg-black/60 text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-black transition">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Kvadrat Şəkil Baxışı -->
+            <div class="aspect-square-custom w-full bg-stone-100 relative overflow-hidden">
+                <img id="dImage" src="" alt="Məhsul" class="w-full h-full object-cover">
+                <span id="dCategoryBadge" class="absolute top-3 left-3 bg-stone-900/80 text-amber-300 text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm"></span>
+            </div>
+
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 id="dTitle" class="font-serif text-xl font-bold text-stone-900"></h3>
+                    <span id="dPrice" class="text-2xl font-extrabold text-amber-900"></span>
+                </div>
+
+                <div class="flex items-center text-xs text-stone-500 mb-4 space-x-4 border-b border-stone-100 pb-3">
+                    <span><i class="fas fa-map-marker-alt text-amber-800 mr-1"></i><span id="dLocation"></span></span>
+                    <span><i class="far fa-clock text-amber-800 mr-1"></i><span id="dDate"></span></span>
+                </div>
+
+                <div class="mb-5">
+                    <h4 class="text-xs font-semibold uppercase text-stone-400 tracking-wider mb-1">Məhsul Təsviri</h4>
+                    <p id="dDesc" class="text-sm text-stone-700 leading-relaxed"></p>
+                </div>
+
+                <!-- Birbaşa WhatsApp Sifariş Düyməsi -->
+                <a id="dWhatsappBtn" href="https://wa.me/994517688886" target="_blank" 
+                   class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-sm flex items-center justify-center space-x-2 shadow-lg transition">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    <span>WhatsApp ilə Sifariş Et (051 768 88 86)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ELEGANT FOOTER (Tələb Olunan Xüsusi Hissə) -->
+    <footer class="bg-stone-950 text-white pt-12 pb-8 border-t-4 border-amber-900 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center text-center">
+                
+                <!-- 1. Header Text -->
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold tracking-wider text-amber-100 mb-2">
+                    AVELOR Brand Watch & Accessories
+                </h2>
+                <p class="text-xs text-stone-400 max-w-md mb-6">
+                    Eleqant saatlar, premium bijuteriya və aksessuarların tək ünvanı. Zəriflik sizin seçiminizdir.
+                </p>
+
+                <!-- 2. WhatsApp Section (Logo + Link + Phone Number) -->
+                <div class="bg-stone-900/90 border border-amber-900/40 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 shadow-xl mb-8 max-w-lg w-full">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-emerald-600/20 text-emerald-400 rounded-full flex items-center justify-center text-2xl border border-emerald-500/30">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-[11px] uppercase tracking-wider text-stone-400 font-semibold">Bizimlə Əlaqə & WhatsApp</div>
+                            <a href="https://wa.me/994517688886" target="_blank" class="text-lg font-bold text-white hover:text-emerald-400 transition tracking-wide">
+                                051 768 88 86
+                            </a>
+                        </div>
+                    </div>
+
+                    <a href="https://wa.me/994517688886" target="_blank" 
+                       class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-5 py-2.5 rounded-xl flex items-center justify-center space-x-2 transition shadow-md">
+                        <i class="fab fa-whatsapp text-lg"></i>
+                        <span>WhatsApp-da Yaz</span>
+                    </a>
+                </div>
+
+                <!-- Sosial Media və Əlaqələr -->
+                <div class="flex space-x-5 text-stone-400 text-lg mb-6">
+                    <a href="#" class="hover:text-amber-400 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-amber-400 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-amber-400 transition"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://wa.me/994517688886" target="_blank" class="hover:text-emerald-400 transition"><i class="fab fa-whatsapp"></i></a>
+                </div>
+
+                <div class="border-t border-stone-800 w-full pt-6 text-center text-[11px] text-stone-500">
+                    © 2026 AVELOR Brand Watch & Accessories. Bütün hüquqlar qorunur.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGICS -->
+    <script>
+        // Saat və Bijuteriya Nümunə Məhsul Siyahısı
+        const initialProducts = [
+            {
+                id: 1,
+                title: "AVELOR Royal Gold Chronograph Saat",
+                price: "340 ₼",
+                category: "Saat",
+                location: "Bakı, Mərkəz",
+                date: "Bu gün, 15:30",
+                image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80",
+                desc: "Qızılı paslanmaz polad gövdə, avtomatik mexanizm, sapfir şüşə. Suya davamlı premium kişi saatı."
+            },
+            {
+                id: 2,
+                title: "Gümüş Örtüklü Zərif Qolbaq",
+                price: "65 ₼",
+                category: "Bijuteriya",
+                location: "Bakı, 28 May",
+                date: "Bu gün, 12:15",
+                image: "https://images.unsplash.com/photo-1611591475111-209fa238fcf8?auto=format&fit=crop&w=600&q=80",
+                desc: "925 əyar gümüş örtüklü, kristallarla bəzədilmiş qadın qolbağı. Qaralmır və allergik reaksiya vermir."
+            },
+            {
+                id: 3,
+                title: "AVELOR Classic Leather Edition Saat",
+                price: "190 ₼",
+                category: "Saat",
+                location: "Bakı, Elmlər",
+                date: "Dünən, 19:40",
+                image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80",
+                desc: "Təbii dəri kəmərli, minimal dizaynlı uniseks qol saatı. Yapon kvars mexanizmi."
+            },
+            {
+                id: 4,
+                title: "Brilliant İllüziyalı Qızıl Üzük",
+                price: "110 ₼",
+                category: "Bijuteriya",
+                location: "Sumqayıt",
+                date: "Dünən, 14:10",
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80",
+                desc: "18K qızıl örtüklü, sirkon daşlarla bəzədilmiş eleqant dizaynlı üzük."
+            },
+            {
+                id: 5,
+                title: "AVELOR Diamond Style Boyunbağı",
+                price: "145 ₼",
+                category: "Bijuteriya",
+                location: "Bakı, Xətai",
+                date: "25 Oktyabr",
+                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80",
+                desc: "Zərif zəncirli və brilyant kəsimli sirkon kulonlu xüsusi boyunbağı."
+            },
+            {
+                id: 6,
+                title: "AVELOR Black Steel Diver Saat",
+                price: "280 ₼",
+                category: "Saat",
+                location: "Bakı, Nərimanov",
+                date: "24 Oktyabr",
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+                desc: "Mat qara polad korpus, fosforlu əqrəblər, 100m suya davamlı idman saatı."
+            }
+        ];
+
+        let products = [...initialProducts];
+        let currentCategory = 'all';
+
+        // Məhsulları render etmək (Tap.az stili 1:1 Kvadrat card)
+        function renderProducts(itemsToRender = getFilteredData()) {
+            const grid = document.getElementById('productGrid');
+            const noProducts = document.getElementById('noProducts');
+            grid.innerHTML = '';
+
+            if (itemsToRender.length === 0) {
+                noProducts.classList.remove('hidden');
+                return;
+            } else {
+                noProducts.classList.add('hidden');
+            }
+
+            itemsToRender.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl border border-stone-200 overflow-hidden card-hover flex flex-col cursor-pointer group shadow-sm";
+                card.onclick = () => openDetailModal(product.id);
+
+                card.innerHTML = `
+                    <!-- Kvadrat 1:1 Şəkil Container -->
+                    <div class="aspect-square-custom w-full bg-stone-100 relative overflow-hidden">
+                        <img src="${product.image}" alt="${product.title}" 
+                             class="w-full h-full object-cover group-hover:scale-108 transition duration-500 ease-out"
+                             onerror="this.src='https://placehold.co/400x400/2b1810/FFFFFF?text=AVELOR'">
+                        
+                        <!-- Category Tag -->
+                        <span class="absolute top-2 left-2 bg-stone-900/80 backdrop-blur-md text-amber-300 text-[10px] font-semibold px-2 py-0.5 rounded uppercase tracking-wider">
+                            ${product.category}
+                        </span>
+
+                        <!-- Like Button -->
+                        <button onclick="event.stopPropagation(); toggleLike(this)" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-stone-600 hover:text-red-500 transition shadow-md">
+                            <i class="far fa-heart text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Tap.az Stili Məhsul İnformasiyası -->
+                    <div class="p-3 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="text-base font-extrabold text-amber-950 mb-0.5">${product.price}</div>
+                            <h3 class="text-xs sm:text-sm text-stone-800 font-medium line-clamp-2 leading-tight mb-2 group-hover:text-amber-900 transition" title="${product.title}">
+                                ${product.title}
+                            </h3>
+                        </div>
+                        <div class="text-[10px] sm:text-[11px] text-stone-400 font-normal border-t border-stone-100 pt-2 mt-1 flex justify-between items-center">
+                            <span class="truncate max-w-[90px]">${product.location}</span>
+                            <span>${product.date.split(',')[0]}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Kateqoriya və Axtarış Filter Logic
+        function getFilteredData() {
+            const query = (document.getElementById('searchInput').value || document.getElementById('mobileSearchInput').value || '').toLowerCase();
+            
+            return products.filter(p => {
+                const matchesCategory = currentCategory === 'all' || p.category.toLowerCase().includes(currentCategory.toLowerCase());
+                const matchesQuery = p.title.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query) || p.location.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+        }
+
+        function setCategoryFilter(cat) {
+            currentCategory = cat;
+            
+            // Button stilləri
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-white border border-stone-300 text-stone-700 hover:bg-stone-100 transition";
+            });
+
+            if(cat === 'all') document.getElementById('btnFilterAll').className = "filter-btn active-filter px-4 py-2 rounded-full text-xs font-semibold bg-stone-900 text-white shadow transition";
+            if(cat === 'Saat') document.getElementById('btnFilterSaat').className = "filter-btn active-filter px-4 py-2 rounded-full text-xs font-semibold bg-stone-900 text-white shadow transition";
+            if(cat === 'Bijuteriya') document.getElementById('btnFilterBijuteriya').className = "filter-btn active-filter px-4 py-2 rounded-full text-xs font-semibold bg-stone-900 text-white shadow transition";
+
+            renderProducts();
+        }
+
+        function filterProducts() {
+            renderProducts();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            setCategoryFilter('all');
+        }
+
+        function toggleLike(btn) {
+            const icon = btn.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas', 'text-red-500');
+            } else {
+                icon.classList.remove('fas', 'text-red-500');
+                icon.classList.add('far');
+            }
+        }
+
+        // Add Product Modal
+        function openAddModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
+            document.getElementById('addProductForm').reset();
+        }
+
+        function handleAddProduct(e) {
+            e.preventDefault();
+            const title = document.getElementById('pTitle').value;
+            const price = document.getElementById('pPrice').value + " ₼";
+            const category = document.getElementById('pCategory').value;
+            const location = document.getElementById('pLocation').value;
+            const imageUrl = document.getElementById('pImageUrl').value || (category === 'Saat' 
+                ? 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80'
+                : 'https://images.unsplash.com/photo-1611591475111-209fa238fcf8?auto=format&fit=crop&w=600&q=80');
+            const desc = document.getElementById('pDesc').value || 'Məhsul haqqında əlavə məlumat verilməyib.';
+
+            const newProduct = {
+                id: Date.now(),
+                title: title,
+                price: price,
+                category: category,
+                location: location,
+                date: "Bu gün",
+                image: imageUrl,
+                desc: desc
+            };
+
+            products.unshift(newProduct);
+            renderProducts();
+            closeAddModal();
+        }
+
+        // Detail Modal
+        function openDetailModal(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('dImage').src = p.image;
+            document.getElementById('dTitle').textContent = p.title;
+            document.getElementById('dPrice').textContent = p.price;
+            document.getElementById('dCategoryBadge').textContent = p.category;
+            document.getElementById('dLocation').textContent = p.location;
+            document.getElementById('dDate').textContent = p.date;
+            document.getElementById('dDesc').textContent = p.desc;
+            
+            // WhatsApp Link setup with dynamic message
+            const waMessage = encodeURIComponent(`Salam AVELOR! "${p.title}" (Qiymət: ${p.price}) məhsulu haqqında məlumat almaq istəyirəm.`);
+            document.getElementById('dWhatsappBtn').href = `https://wa.me/994517688886?text=${waMessage}`;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            renderProducts();
+        };
+    </script>
+</body>
+</html>
